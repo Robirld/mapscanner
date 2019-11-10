@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@drawable/jiaoda2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/take_photo"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="120dp"
+        android:background="@drawable/button_shape01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Take Photos"
+        android:textSize="18dp"/>
+
+    <Button
+        android:id="@+id/choose_from_album"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/button_shape01"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose From Album"
+        android:textSize="18dp"/>
+
+</LinearLayout>

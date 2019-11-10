@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/Linear"
+    android:background="@drawable/jiaoda2"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <RelativeLayout
+        android:id="@+id/rtv"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/Return_Back_to_page1"
+            android:background="@drawable/button_shape02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="return" />
+        <Button
+            android:id="@+id/upload"
+            android:background="@drawable/button_shape02"
+            android:onClick="onClickUpload"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="upload" />
+        <Button
+            android:id="@+id/choose"
+            android:background="@drawable/button_shape02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="choose"/>
+        <Button
+            android:id="@+id/cancel"
+            android:background="@drawable/button_shape02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="cancel"/>
+        <Button
+            android:id="@+id/allChoose"
+            android:background="@drawable/button_shape02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="all"/>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/V_Image1"
+        android:layout_marginTop="10dp"
+        android:scaleType="fitStart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/ic_launcher" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="5dp"
+        android:id="@+id/RcV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+</LinearLayout>
