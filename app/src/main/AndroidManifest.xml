@@ -20,18 +20,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".WelcomeActivity"
+        <activity android:name=".RegisterPageActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".MainPageActivity" />
+        <activity
+            android:name=".WelcomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.media.action.IMAGE_CAPTURE" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -43,8 +45,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".Image_album_showActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".Image_album_showActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

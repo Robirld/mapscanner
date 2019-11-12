@@ -19,7 +19,7 @@ public class WelcomeActivity extends AppCompatActivity {
     };
 
     private void next() {
-        Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+        Intent intent = new Intent(WelcomeActivity.this, MainPageActivity.class);
         startActivity(intent);
 
         //关闭当前

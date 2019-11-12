@@ -25,7 +25,7 @@
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="upload" />
+            android:text="search" />
         <Button
             android:id="@+id/choose"
             android:background="@drawable/button_shape02"

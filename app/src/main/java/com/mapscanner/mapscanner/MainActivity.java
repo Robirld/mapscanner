@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button takePhoto = (Button) findViewById(R.id.take_photo);
         Button chooseFromAlbum = (Button) findViewById(R.id.choose_from_album);
+        Button back = findViewById(R.id.back);
 //        takePhoto.setVisibility(View.INVISIBLE);
         //对照相功能的响应
         takePhoto.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +66,12 @@ public class MainActivity extends AppCompatActivity {
 
                 MainActivity.this.startActivity(intent);
             }
+
+        });
+        back.setOnClickListener(i -> {
+            Intent intent = new Intent();
+            intent.setClass(MainActivity.this, MainPageActivity.class);
+            startActivity(intent);
         });
     }
 }

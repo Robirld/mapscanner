@@ -102,14 +102,6 @@ public class Image_album_showActivity extends AppCompatActivity {
                         requestPermissions(
                                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
                                 300);
-                    } else {
-                        String name = "CrashDirectory";
-                        File file1 = new File(Environment.getExternalStorageDirectory(), name);
-                        if (file1.mkdirs()) {
-                            Log.i("wytings", "permission -------------> " + file1.getAbsolutePath());
-                        } else {
-                            Log.i("wytings", "permission -------------fail to make file ");
-                        }
                     }
                 } else {
                     Log.i("wytings", "------------- Build.VERSION.SDK_INT < 23 ------------");

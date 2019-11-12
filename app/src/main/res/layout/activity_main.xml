@@ -25,4 +25,16 @@
         android:text="Choose From Album"
         android:textSize="18dp"/>
 
+    <Button
+        android:id="@+id/back"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_shape01"
+        android:layout_marginTop="90dp"
+        android:text="back"
+        android:textSize="20dp"
+        android:textColor="#f73"
+        android:layout_gravity="center"/>
+
+
 </LinearLayout>
