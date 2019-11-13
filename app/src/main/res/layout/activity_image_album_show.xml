@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     >
     <RelativeLayout
-        android:id="@+id/rtv"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -15,54 +14,92 @@
         <Button
             android:id="@+id/Return_Back_to_page1"
             android:background="@drawable/button_shape02"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
             android:text="return" />
         <Button
             android:id="@+id/upload"
             android:background="@drawable/button_shape02"
+            android:layout_marginRight="10dp"
             android:onClick="onClickUpload"
             android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
             android:text="search" />
-        <Button
-            android:id="@+id/choose"
-            android:background="@drawable/button_shape02"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="choose"/>
-        <Button
-            android:id="@+id/cancel"
-            android:background="@drawable/button_shape02"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="cancel"/>
-        <Button
-            android:id="@+id/allChoose"
-            android:background="@drawable/button_shape02"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+
+        <ImageView
+            android:id="@+id/V_Image1"
+            android:layout_below="@+id/upload"
+            android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
-            android:text="all"/>
+            android:scaleType="fitStart"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:src="@mipmap/ic_launcher" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/search_frame"
+        android:layout_width="300dp"
+        android:layout_height="280dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/border_shape01"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/search_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="搜索结果"
+            android:textSize="22dp"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:layout_centerHorizontal="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/face_num_label"
+            android:text="人脸数量："
+            android:textSize="16dp"
+            android:layout_below="@+id/search_result"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="25dp"/>
+        <EditText
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/face_num"
+            android:layout_toRightOf="@+id/face_num_label"
+            android:layout_below="@+id/search_result"
+            android:layout_marginTop="18dp"
+            android:textAlignment="center"
+            android:inputType="number"
+            android:textSize="16dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/face_info_label"
+            android:text="人脸信息："
+            android:textSize="16dp"
+            android:layout_below="@+id/face_num_label"
+            android:layout_marginTop="25dp"
+            android:layout_alignLeft="@+id/face_num_label"/>
+
+        <EditText
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/face_info"
+            android:layout_toRightOf="@+id/face_info_label"
+            android:layout_below="@+id/face_num_label"
+            android:layout_marginTop="20dp"
+            android:hint="格式：（序号） 姓名 生日 手机号码"
+            android:textSize="14dp"
+            android:textColorHint="#f00"
+            android:singleLine="false"
+            android:minLines="2"
+            android:background="@drawable/border_shape02"/>
 
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/V_Image1"
-        android:layout_marginTop="10dp"
-        android:scaleType="fitStart"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:src="@mipmap/ic_launcher" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="5dp"
-        android:id="@+id/RcV"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
 
 </LinearLayout>

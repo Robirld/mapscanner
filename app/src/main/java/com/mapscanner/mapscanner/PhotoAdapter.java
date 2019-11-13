@@ -25,36 +25,10 @@ import java.util.List;
 class PhotoAdapter extends RecyclerView.Adapter {
 
     private final List<File> photoList;
-    private final RelativeLayout rtv;
-    private StringBuilder flag[] = new StringBuilder[2];
     private File file;
-    private String[] strs;
-    private int[] status;
-    private List<File> selectedFile;
 
-    public PhotoAdapter(List<File> photoList, List<File> selectedFile, StringBuilder[] flag, RelativeLayout rtv) {
+    public PhotoAdapter(List<File> photoList) {
         this.photoList = photoList;
-        this.flag = flag;
-        this.selectedFile = selectedFile;
-        this.rtv = rtv;
-
-        status = new int[photoList.size()];
-
-        strs = new String[photoList.size()];
-        for (int i = 0; i<strs.length; i++) {
-            if (flag[1].toString().equals("IS")){
-                strs[i] = new String("NO");
-            }else if (flag[1].toString().equals("ISALL")){
-                strs[i] = new String("SELECTED");
-            }
-
-            if(flag[0].toString().equals("NO")){
-                status[i] = View.INVISIBLE;
-            }else if (flag[0].toString().equals("NOtoOK")){
-                status[i] = View.VISIBLE;
-            }
-        }
-
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -90,26 +64,7 @@ class PhotoAdapter extends RecyclerView.Adapter {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        holder.text.setText(strs[position]);
-        holder.text.setVisibility(status[position]);
-
         holder.imgView.setOnClickListener(i -> {
-            if (flag[0].toString().equals("NOtoOK")){
-                if (holder.text.getText().toString().equals("NO")){
-                        selectedFile.add(photoList.get(position));
-                        holder.text.setText("SELECTED");
-                        strs[position] = new String("SELECTED");
-                        System.out.println(selectedFile);
-                }else if (holder.text.getText().toString().equals("SELECTED")){
-                        selectedFile.remove(photoList.get(position));
-                        System.out.println(selectedFile);
-                        holder.text.setText("NO");
-                        strs[position] = new String("NO");
-                }
-                if (!(rtv.findViewById(R.id.allChoose).isEnabled())){
-                    rtv.findViewById(R.id.allChoose).setEnabled(true);
-                }
-            }
         });
     }
 

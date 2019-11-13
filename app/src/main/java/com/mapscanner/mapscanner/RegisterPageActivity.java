@@ -9,7 +9,6 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.icu.util.Calendar;
@@ -25,8 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.mapscanner.mapscanner.baidubrain.AuthService;
-import com.mapscanner.mapscanner.baidubrain.FaceAdd;
+import com.mapscanner.mapscanner.baidubrain.FaceRecogniseUtil;
 import com.mapscanner.mapscanner.utils.ImgUtil;
 import com.mapscanner.mapscanner.utils.MongoDBUtill;
 import com.mongodb.client.MongoCollection;
@@ -37,7 +35,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -110,7 +107,7 @@ public class RegisterPageActivity extends AppCompatActivity {
                 Log.i("wytings", "------------- Build.VERSION.SDK_INT < 23 ------------");
             }
             Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_PICK);
+            intent.setAction("android.intent.action.GET_CONTENT");
             intent.setType("image/*");
             startActivityForResult(intent, 1);
         });
@@ -128,7 +125,7 @@ public class RegisterPageActivity extends AppCompatActivity {
                 t.show();
             }else {
                 Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
-                String base64 = bitmapToBase64(bitmap);
+                String base64 = ImgUtil.bitmapToBase64(bitmap);
                 Map<String,Object> map = new HashMap<>();
                 map.put("user_name", uName.toString());
                 map.put("birthday", birth.toString());
@@ -140,8 +137,11 @@ public class RegisterPageActivity extends AppCompatActivity {
                     public void run() {
                         boolean flag = false;
 
+                        // 获取token对象
+                        String accessToken = FaceRecogniseUtil.getAuth();
+
                         // 注册到百度大脑
-                        String add = FaceAdd.add(base64, map.toString());
+                        String add = FaceRecogniseUtil.add(accessToken, base64, map.toString());
                         if (add == null){
                             Looper.prepare();
                             Toast.makeText(RegisterPageActivity.this, "注册失败", Toast.LENGTH_LONG).show();
@@ -200,13 +200,5 @@ public class RegisterPageActivity extends AppCompatActivity {
             }
             photo.setImageBitmap(bitmap);
         }
-    }
-
-    // 将bitmap转为base64
-    public String bitmapToBase64(Bitmap bitmap){
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-        byte[] bytes = out.toByteArray();
-        return Base64.encodeToString(bytes,Base64.DEFAULT);
     }
 }

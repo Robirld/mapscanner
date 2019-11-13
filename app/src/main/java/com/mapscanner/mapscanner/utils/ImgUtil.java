@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Base64;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -103,5 +104,13 @@ public class ImgUtil {
         //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
         bitmap = BitmapFactory.decodeFile(srcPath, newOpts);
         return compressImage(bitmap);//压缩好比例大小后再进行质量压缩
+    }
+
+    // 将bitmap转为base64
+    public static String bitmapToBase64(Bitmap bitmap){
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        byte[] bytes = out.toByteArray();
+        return Base64.encodeToString(bytes,Base64.DEFAULT);
     }
 }
