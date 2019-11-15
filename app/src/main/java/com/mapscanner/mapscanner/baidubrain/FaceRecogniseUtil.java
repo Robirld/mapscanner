@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -234,7 +235,7 @@ public class FaceRecogniseUtil {
         try {
             Map<String, Object> map = new HashMap<>();
             map.put("image", base64);
-            map.put("face_field", "age,beauty,expression,gender,glasses,race,faceshape,facetype");
+            map.put("face_field", "age,beauty,gender,race,faceshape");
             map.put("image_type", "BASE64");
 
             String param = GsonUtils.toJson(map);
@@ -248,4 +249,36 @@ public class FaceRecogniseUtil {
         return null;
     }
 
+    // 人脸对比
+    public static String faceMatch(String accessToken, String base64One, String base64Two) {
+        // 请求url
+        String url = "https://aip.baidubce.com/rest/2.0/face/v3/match";
+        try {
+
+            List<Map<String, Object>> maps = new ArrayList<>(2);
+            Map<String, Object> map = new HashMap<>();
+            map.put("image", base64One);
+            map.put("image_type", "BASE64");
+            map.put("face_type", "LIVE");
+            map.put("quality_control", "LOW");
+            map.put("liveness_control", "HIGH");
+            maps.add(map);
+            Map<String, Object> map2 = new HashMap<>();
+            map2.put("image", base64Two);
+            map2.put("image_type", "BASE64");
+            map2.put("face_type", "LIVE");
+            map2.put("quality_control", "LOW");
+            map2.put("liveness_control", "HIGH");
+            maps.add(map2);
+
+            String param = GsonUtils.toJson(maps);
+
+            String result = HttpUtil.post(url, accessToken, "application/json", param);
+            System.out.println(result);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

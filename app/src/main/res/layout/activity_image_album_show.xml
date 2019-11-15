@@ -33,16 +33,16 @@
             android:layout_below="@+id/upload"
             android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
-            android:scaleType="fitStart"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:scaleType="fitCenter"
+            android:layout_width="260dp"
+            android:layout_height="260dp"
             android:src="@mipmap/ic_launcher" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/search_frame"
         android:layout_width="300dp"
-        android:layout_height="280dp"
+        android:layout_height="260dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/border_shape01"
         android:layout_gravity="center">
@@ -71,10 +71,10 @@
             android:id="@+id/face_num"
             android:layout_toRightOf="@+id/face_num_label"
             android:layout_below="@+id/search_result"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="25dp"
             android:textAlignment="center"
-            android:inputType="number"
-            android:textSize="16dp"/>
+            android:textSize="16dp"
+            android:background="@drawable/border_shape02"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

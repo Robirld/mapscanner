@@ -37,6 +37,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mapscanner.mapscanner.baidubrain.FaceRecogniseUtil;
 import com.mapscanner.mapscanner.utils.ImgUtil;
+import com.mapscanner.mapscanner.utils.ToastUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -81,6 +82,8 @@ public class Image_album_showActivity extends AppCompatActivity {
         Show_Choice = bundle.getInt("id");
         faceNum = findViewById(R.id.face_num);
         userInfo = findViewById(R.id.face_info);
+        faceNum.setEnabled(false);
+        userInfo.setEnabled(false);
 
         Return_page.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -221,6 +224,17 @@ public class Image_album_showActivity extends AppCompatActivity {
 //                    PhotoAdapter adapter2 = new PhotoAdapter(photoList, selectedFile, flag, rtv);
 //                });
 //                    rv.setAdapter(adapter2);
+                if (Build.VERSION.SDK_INT >= 23) {
+                    int write = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    int read = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+                    if (write != PackageManager.PERMISSION_GRANTED || read != PackageManager.PERMISSION_GRANTED) {
+                        requestPermissions(
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                                300);
+                    }
+                } else {
+                    Log.i("wytings", "------------- Build.VERSION.SDK_INT < 23 ------------");
+                }
                 Intent intent = new Intent("android.intent.action.GET_CONTENT");
                 intent.setType("image/*");
                 startActivityForResult(intent, CHOOSE_PHOTO);
@@ -279,46 +293,16 @@ public class Image_album_showActivity extends AppCompatActivity {
         }
     }
 
-    private void savePhotoToSDCard(String path, Bitmap photoBit) {
-        Date date = new Date(System.currentTimeMillis());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("'img'_yyMMdd_HHmmss");
-        String photoName = dateFormat.format(date) + ".jpg";
-        if (android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            File dir = new File(path);
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-
-            //在指定路径下创建文件
-            File photoFile = new File(dir, photoName);
-            FileOutputStream fileOutputStream = null;
-            try {
-                fileOutputStream = new FileOutputStream(photoFile);
-                if (photoBit != null) {
-                    if (photoBit.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)) {
-                        fileOutputStream.flush();
-                        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~:" + fileOutputStream);
-//                        fileOutputStream.close();
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    fileOutputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
 
     public void onClickUpload(View view) {
+        Bitmap bitmap = ((BitmapDrawable)picture1.getDrawable()).getBitmap();
+        StringBuffer fNum = new StringBuffer();
+        StringBuffer allInfo = new StringBuffer();
 
-        new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                Bitmap bitmap = ((BitmapDrawable)picture1.getDrawable()).getBitmap();
+
                 String base64 = ImgUtil.bitmapToBase64(bitmap);
                 String accessToken = FaceRecogniseUtil.getAuth();
 
@@ -328,12 +312,14 @@ public class Image_album_showActivity extends AppCompatActivity {
                 if (result != null){
                     try {
                         JSONObject rsJson = new JSONObject(result);
-                        if ("SUCCESS".equals(rsJson.get("error_msg"))){
+                        String error = rsJson.get("error_msg").toString();
+                        if ("SUCCESS".equals(error)){
                             JSONObject res = new JSONObject(rsJson.get("result").toString());
                             JSONArray uList = (JSONArray) res.get("face_list");
-                            String fNum = rsJson.get("face_num").toString();
-                            faceNum.setText(fNum);
-                            StringBuffer allInfo = new StringBuffer();
+                            fNum.append(res.get("face_num").toString());
+//                            Looper.prepare();
+//                            Toast.makeText(Image_album_showActivity.this, fNum, Toast.LENGTH_LONG).show();
+//                            Looper.loop();
                             for (int i = 0; i < uList.length(); i++){
                                 JSONArray user_list = (JSONArray) new JSONObject(uList.get(i).toString()).get("user_list");
                                 String user_info = new JSONObject(user_list.get(0).toString()).get("user_info").toString();
@@ -342,23 +328,38 @@ public class Image_album_showActivity extends AppCompatActivity {
                                 if (i == uList.length()-1){
                                     tr = "";
                                 }
-                                String info = "(" + (i + 1) + ")" + uiJson.get("user_name").toString() + " " + uiJson.get(
+                                String info =
+                                        "(" + (i + 1) + ") " + uiJson.get("user_name").toString() + " " + uiJson.get(
                                         "birthday").toString() + " " + uiJson.get("phone_num").toString() + tr;
                                 allInfo.append(info);
                             }
-                            userInfo.setText(allInfo);
                         }else {
-                            Looper.prepare();
-                            Toast.makeText(Image_album_showActivity.this, "搜索失败：" + rsJson.get("error_msg"),
-                                    Toast.LENGTH_LONG).show();
-                            Looper.loop();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ToastUtils.showToast(getApplicationContext(), "搜索失败：" + error, 0);
+                                }
+                            });
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
             }
-        }).start();
+        });
+        thread.start();
+
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (!("".equals(fNum.toString()))){
+            faceNum.setText(fNum.toString());
+        }
+        if (!("".equals(allInfo.toString()))) {
+            userInfo.setText(allInfo.toString());
+        }
     }
 
 }

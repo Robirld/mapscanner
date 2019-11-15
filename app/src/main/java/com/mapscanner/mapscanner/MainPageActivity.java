@@ -13,6 +13,8 @@ public class MainPageActivity extends AppCompatActivity {
 
     private Button register;
     private Button search;
+    private Button detect;
+    private Button match;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +22,8 @@ public class MainPageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_page);
         register = findViewById(R.id.face_ragister);
         search = findViewById(R.id.face_search);
+        detect = findViewById(R.id.face_detect);
+        match = findViewById(R.id.face_match);
 
         register.setOnClickListener(i -> {
             Intent intent = new Intent();
@@ -35,5 +39,18 @@ public class MainPageActivity extends AppCompatActivity {
 //            intent.putExtras(bundle);
             startActivity(intent);
         });
+
+        detect.setOnClickListener(i -> {
+            Intent intent = new Intent();
+            intent.setClass(MainPageActivity.this, FaceDetectActivity.class);
+            startActivity(intent);
+        });
+
+        match.setOnClickListener(i -> {
+            Intent intent = new Intent();
+            intent.setClass(MainPageActivity.this, FaceMatchActivity.class);
+            startActivity(intent);
+        });
     }
+
 }

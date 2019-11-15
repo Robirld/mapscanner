@@ -13,10 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="80dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="120dp"
         android:background="@drawable/button_shape01"
         android:textSize="24dp"
-        android:text="register face"
+        android:text="人脸注册"
         android:textColor="#fb0"/>
 
     <Button
@@ -26,7 +26,29 @@
         android:layout_marginHorizontal="80dp"
         android:layout_marginTop="50dp"
         android:background="@drawable/button_shape01"
-        android:text="search face"
+        android:text="人脸搜索"
+        android:textSize="24dp"
+        android:textColor="#fb0"/>
+
+    <Button
+        android:id="@+id/face_detect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="80dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/button_shape01"
+        android:text="人脸检测"
+        android:textSize="24dp"
+        android:textColor="#fb0"/>
+
+    <Button
+        android:id="@+id/face_match"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="80dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/button_shape01"
+        android:text="人脸对比"
         android:textSize="24dp"
         android:textColor="#fb0"/>
 

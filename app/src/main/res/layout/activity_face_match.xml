@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingVertical="20dp"
+    android:orientation="vertical"
+    tools:context=".FaceMatchActivity">
+    <Button
+        android:id="@+id/back_match"
+        android:background="@drawable/button_shape02"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:text="返回" />
+    <Button
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:id="@+id/start_match"
+        android:background="@drawable/button_shape02"
+        android:text="对比"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"/>
+
+    <ImageView
+        android:layout_width="160sp"
+        android:layout_height="170sp"
+        android:id="@+id/match_img01"
+        android:layout_below="@+id/back_match"
+        android:layout_marginTop="50dp"
+        android:layout_alignLeft="@+id/back_match"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/ic_launcher"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/match_text01"
+        android:text="点击添加图片1"
+        android:textColor="#00f"
+        android:layout_below="@+id/match_img01"
+        android:textSize="24sp"
+        android:layout_alignLeft="@+id/match_img01"
+        android:layout_marginTop="10dp"/>
+
+    <ImageView
+        android:layout_width="160sp"
+        android:layout_height="170sp"
+        android:id="@+id/match_img02"
+        android:layout_below="@+id/start_match"
+        android:layout_alignRight="@+id/start_match"
+        android:layout_marginTop="50dp"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/ic_launcher"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/match_text02"
+        android:text="点击添加图片2"
+        android:textColor="#00f"
+        android:layout_below="@+id/match_img01"
+        android:textSize="24sp"
+        android:layout_alignRight="@+id/match_img02"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/similarity"
+        android:text="相似度结果"
+        android:layout_below="@+id/match_text01"
+        android:textSize="35sp"
+        android:textColor="#f00"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:layout_width="200sp"
+        android:layout_height="100sp"
+        android:id="@+id/sim_result"
+        android:textColor="#000"
+        android:textSize="40sp"
+        android:background="@drawable/border_shape02"
+        android:layout_below="@+id/similarity"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:textAlignment="center"
+        android:hint="例子：55"
+        android:textColorHint="#f00"/>
+
+</RelativeLayout>

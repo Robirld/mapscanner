@@ -1,6 +1,7 @@
 package com.mapscanner.mapscanner;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
@@ -51,6 +52,7 @@ public class RegisterPageActivity extends AppCompatActivity {
     Button daySelect;
     Button imgSelect;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +86,7 @@ public class RegisterPageActivity extends AppCompatActivity {
                 @Override
                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                     // 此处得到选择的时间，可以进行你想要的操作
-                    birthday.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth );
+                    birthday.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                 }
             }
                     // 设置初始日期
@@ -120,64 +122,86 @@ public class RegisterPageActivity extends AppCompatActivity {
             Editable eMail = mail.getText();
             Drawable drawable = photo.getDrawable();
 
-            if (uName == null || birth == null || phone == null || eMail == null || drawable == null){
+            boolean judge =
+                    "".equals(uName.toString()) || "".equals(birth.toString()) || "".equals(
+                            eMail.toString()) || "".equals(phone.toString());
+
+            if (judge || uName == null || birth == null || phone == null || eMail == null || drawable == null) {
                 Toast t = Toast.makeText(RegisterPageActivity.this, "都是必填项，您有未填项", Toast.LENGTH_LONG);
                 t.show();
-            }else {
-                Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+            } else {
+                Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
                 String base64 = ImgUtil.bitmapToBase64(bitmap);
-                Map<String,Object> map = new HashMap<>();
+                Map<String, Object> map = new HashMap<>();
                 map.put("user_name", uName.toString());
                 map.put("birthday", birth.toString());
                 map.put("phone_num", phone.toString());
                 map.put("e-mail", eMail.toString());
 
-                new Thread(new Runnable(){
+                new Thread(new Runnable() {
                     @Override
                     public void run() {
                         boolean flag = false;
 
                         // 获取token对象
                         String accessToken = FaceRecogniseUtil.getAuth();
-
-                        // 注册到百度大脑
-                        String add = FaceRecogniseUtil.add(accessToken, base64, map.toString());
-                        if (add == null){
-                            Looper.prepare();
-                            Toast.makeText(RegisterPageActivity.this, "注册失败", Toast.LENGTH_LONG).show();
-                            Looper.loop();
-                            return;
-                        }
-                        JSONObject jsonObject = null;
+                        String search = FaceRecogniseUtil.facesSearch(accessToken, base64, "group01");
+                        JSONObject searchJson = null;
                         try {
-                            jsonObject = new JSONObject(add);
-                            String errorMsg = jsonObject.get("error_msg").toString();
-                            if(errorMsg.equals("SUCCESS")){
-                                flag = true;
+                            searchJson = new JSONObject(search);
+                            String searchMsg = searchJson.get("error_msg").toString();
+
+                            if (searchMsg.equals("SUCCESS")){
                                 Looper.prepare();
-                                Toast.makeText(RegisterPageActivity.this, "注册成功", Toast.LENGTH_LONG).show();
+                                Toast.makeText(RegisterPageActivity.this, "用户已注册，无需再注册", Toast.LENGTH_LONG).show();
                                 Looper.loop();
+                            }else if (searchMsg.equals("match user is not found")) {
+                                // 注册到百度大脑
+                                String add = FaceRecogniseUtil.add(accessToken, base64, map.toString());
+                                if (add == null) {
+                                    Looper.prepare();
+                                    Toast.makeText(RegisterPageActivity.this, "注册失败：注册异常", Toast.LENGTH_LONG).show();
+                                    Looper.loop();
+                                } else {
+                                    JSONObject jsonObject = null;
+                                    jsonObject = new JSONObject(add);
+                                    String errorMsg = jsonObject.get("error_msg").toString();
+                                    if (errorMsg.equals("SUCCESS")) {
+                                        flag = true;
+                                        Looper.prepare();
+                                        Toast.makeText(RegisterPageActivity.this, "注册成功", Toast.LENGTH_LONG).show();
+                                        Looper.loop();
+                                    } else {
+                                        Looper.prepare();
+                                        Toast.makeText(RegisterPageActivity.this,
+                                                new StringBuffer("注册失败：").append(errorMsg).toString(),
+                                                Toast.LENGTH_LONG).show();
+                                        Looper.loop();
+
+                                        if (flag) {
+                                            // 用户信息上传到云服务器的MongoDB
+                                            Document document = new Document(map);
+                                            document.append("photo", base64);
+                                            MongoDatabase face_library = MongoDBUtill.getConnection("39.105.102.158",
+                                                    27017,
+                                                    "face_library");
+                                            MongoCollection<Document> user_info = face_library.getCollection(
+                                                    "user_info");
+                                            user_info.insertOne(document);
+                                            Looper.prepare();
+                                            Toast.makeText(RegisterPageActivity.this, "成功上传数据到云数据库",
+                                                    Toast.LENGTH_LONG).show();
+                                            Looper.loop();
+                                        }
+                                    }
+                                }
                             }else {
                                 Looper.prepare();
-                                Toast.makeText(RegisterPageActivity.this,
-                                        new StringBuffer("注册失败：").append(errorMsg).toString(),
-                                        Toast.LENGTH_LONG).show();
+                                Toast.makeText(RegisterPageActivity.this, "注册失败：" + searchMsg, Toast.LENGTH_LONG).show();
                                 Looper.loop();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
-                        }
-
-                        if (flag){
-                            // 用户信息上传到云服务器的MongoDB
-                            Document document = new Document(map);
-                            document.append("photo", base64);
-                            MongoDatabase face_library = MongoDBUtill.getConnection("39.105.102.158", 27017, "face_library");
-                            MongoCollection<Document> user_info = face_library.getCollection("user_info");
-                            user_info.insertOne(document);
-                            Looper.prepare();
-                            Toast.makeText(RegisterPageActivity.this, "成功上传数据到云数据库", Toast.LENGTH_LONG).show();
-                            Looper.loop();
                         }
                     }
                 }).start();
@@ -188,7 +212,7 @@ public class RegisterPageActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == 1){
+        if (resultCode == RESULT_OK && requestCode == 1) {
             Bitmap bitmap = null;
             //判断手机系统版本号
             if (Build.VERSION.SDK_INT >= 19) {
