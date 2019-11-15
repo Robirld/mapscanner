@@ -75,7 +75,6 @@ public class FaceRecogniseUtil {
             /**
              * 返回结果示例
              */
-            System.err.println("result:" + result);
             JSONObject jsonObject = new JSONObject(result);
             String access_token = jsonObject.getString("access_token");
             return access_token;
@@ -107,13 +106,14 @@ public class FaceRecogniseUtil {
             int id = max + 1;
             char temp[] = {'0','0','0','0','0','0'};
             if (id < 1000000){
-                for (int i = id, cout = 0; i > 0; i = id / 10){
+                for (int i = id, cout = 0; i > 0;){
                     int j = i % 10;
-                    temp[5-cout++] = (char)(j+48);
+                    temp[5-cout] = (char)(j+48);
+                    cout++;
+                    i = (int)(i / 10);
                 }
             }
             String userId = new String(temp);
-            System.out.println(userId);
 
             Map<String, Object> map = new HashMap<>();
             map.put("image", imgBase64);
@@ -129,7 +129,6 @@ public class FaceRecogniseUtil {
             // 注意这里仅为了简化编码每一次请求都去获取access_token，线上环境access_token有过期时间， 客户端可自行缓存，过期后重新获取。
 
             String result = HttpUtil.post(url, accessToken, "application/json", param);
-            System.out.println(result);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -151,7 +150,6 @@ public class FaceRecogniseUtil {
             String result = HttpUtil.post(url, accessToken, "application/json", param);
 //            System.out.println(result);
             JSONObject jsonGroup = (JSONObject) new JSONObject(result).get("result");
-            System.out.println(jsonGroup);
             JSONArray group_id_list = (JSONArray) jsonGroup.get("group_id_list");
             return group_id_list;
         } catch (Exception e) {
@@ -194,7 +192,6 @@ public class FaceRecogniseUtil {
             String param = GsonUtils.toJson(map);
 
             String result = HttpUtil.post(url, accessToken, "application/json", param);
-            System.out.println(result);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -220,7 +217,6 @@ public class FaceRecogniseUtil {
             String param = GsonUtils.toJson(map);
 
             String result = HttpUtil.post(url, accessToken, "application/json", param);
-            System.out.println(result);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -241,7 +237,6 @@ public class FaceRecogniseUtil {
             String param = GsonUtils.toJson(map);
 
             String result = HttpUtil.post(url, accessToken, "application/json", param);
-            System.out.println(result);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -274,7 +269,6 @@ public class FaceRecogniseUtil {
             String param = GsonUtils.toJson(maps);
 
             String result = HttpUtil.post(url, accessToken, "application/json", param);
-            System.out.println(result);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
