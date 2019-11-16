@@ -67,18 +67,10 @@ class PhotoAdapter extends RecyclerView.Adapter {
 
         String file = photoList.get(position);
         ViewHolder holder = (ViewHolder)vholder;
-        Bitmap bitmap = null;
-        try {
-            bitmap = BitmapFactory.decodeStream(new FileInputStream(file));
-            holder.imgView.setImageBitmap(bitmap);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        Bitmap bitmap = ImgUtil.getImage(file);
+        holder.imgView.setImageBitmap(bitmap);
         StringBuffer str = new StringBuffer();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 40, out);
-        byte[] bytes = out.toByteArray();
-        String base64 = Base64.encodeToString(bytes, 0);
+        String base64 = ImgUtil.bitmapToBase64(bitmap);
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
