@@ -151,21 +151,17 @@ public class Image_album_showActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK){
+            Bitmap bitmap = null;
+            //判断手机系统版本号
+            if (Build.VERSION.SDK_INT >= 19) {
+                //4.4及以上系统使用这个方法处理图片
+                bitmap = ImgUtil.handleImageOnKitKat(this, data);        //ImgUtil是自己实现的一个工具类
+            } else {
+                //4.4以下系统使用这个方法处理图片
+                bitmap = ImgUtil.handleImageBeforeKitKat(this, data);
+            }
+            picture1.setImageBitmap(bitmap);
             if (requestCode == TAKE_PHOTO ) {
-                Bitmap bitmap = null;
-                try {
-                    bitmap =
-                            BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                picture1.setImageBitmap(bitmap);
-                getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
-                int screenWidth = outMetrics.widthPixels;
-                int screenHeight = outMetrics.heightPixels;
-                picture1.setMaxWidth(screenWidth);
-                picture1.setMaxHeight(screenHeight * 3);
-
                 try {
                     //图片插入到系统图库
                     MediaStore.Images.Media.insertImage(getContentResolver(), bitmap,
@@ -176,18 +172,6 @@ public class Image_album_showActivity extends AppCompatActivity {
                 //通知图库刷新
                 sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
                         Uri.parse("file://" + imgFile.getAbsolutePath())));
-            }
-            if (requestCode == CHOOSE_PHOTO){
-                Bitmap bitmap = null;
-                //判断手机系统版本号
-                if (Build.VERSION.SDK_INT >= 19) {
-                    //4.4及以上系统使用这个方法处理图片
-                    bitmap = ImgUtil.handleImageOnKitKat(this, data);        //ImgUtil是自己实现的一个工具类
-                } else {
-                    //4.4以下系统使用这个方法处理图片
-                    bitmap = ImgUtil.handleImageBeforeKitKat(this, data);
-                }
-                picture1.setImageBitmap(bitmap);
             }
         }
     }
@@ -216,9 +200,6 @@ public class Image_album_showActivity extends AppCompatActivity {
                             JSONObject res = new JSONObject(rsJson.get("result").toString());
                             JSONArray uList = (JSONArray) res.get("face_list");
                             fNum.append(res.get("face_num").toString());
-//                            Looper.prepare();
-//                            Toast.makeText(Image_album_showActivity.this, fNum, Toast.LENGTH_LONG).show();
-//                            Looper.loop();
                             for (int i = 0; i < uList.length(); i++){
                                 JSONArray user_list = (JSONArray) new JSONObject(uList.get(i).toString()).get("user_list");
                                 String user_info = new JSONObject(user_list.get(0).toString()).get("user_info").toString();
