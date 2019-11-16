@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.mapscanner.mapscanner.utils.AuthorityUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,7 @@ public class FaceDetectActivity extends AppCompatActivity {
         });
 
         choose.setOnClickListener(i -> {
+            AuthorityUtils.getAlbumAuthority(FaceDetectActivity.this);
             Intent intent = new Intent(FaceDetectActivity.this, MultiImageSelectorActivity.class);
             // 存储照片的list
             ArrayList<String> imgList = new ArrayList<>();
