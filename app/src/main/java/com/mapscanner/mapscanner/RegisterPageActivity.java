@@ -141,7 +141,6 @@ public class RegisterPageActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        boolean flag = false;
 
                         // 获取token对象
                         String accessToken = FaceRecogniseUtil.getAuth();
@@ -167,9 +166,18 @@ public class RegisterPageActivity extends AppCompatActivity {
                                     jsonObject = new JSONObject(add);
                                     String errorMsg = jsonObject.get("error_msg").toString();
                                     if (errorMsg.equals("SUCCESS")) {
-                                        flag = true;
+                                        // 用户信息上传到云服务器的MongoDB
+                                        Document document = new Document(map);
+                                        document.append("photo", base64);
+                                        MongoDatabase face_library = MongoDBUtill.getConnection("39.105.102.158",
+                                                27017,
+                                                "face_library");
+                                        MongoCollection<Document> user_info = face_library.getCollection(
+                                                "user_info");
+                                        user_info.insertOne(document);
                                         Looper.prepare();
-                                        Toast.makeText(RegisterPageActivity.this, "注册成功", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(RegisterPageActivity.this, "注册成功且上传数据到云数据库",
+                                                Toast.LENGTH_LONG).show();
                                         Looper.loop();
                                     } else {
                                         Looper.prepare();
@@ -177,22 +185,6 @@ public class RegisterPageActivity extends AppCompatActivity {
                                                 new StringBuffer("注册失败：").append(errorMsg).toString(),
                                                 Toast.LENGTH_LONG).show();
                                         Looper.loop();
-
-                                        if (flag) {
-                                            // 用户信息上传到云服务器的MongoDB
-                                            Document document = new Document(map);
-                                            document.append("photo", base64);
-                                            MongoDatabase face_library = MongoDBUtill.getConnection("39.105.102.158",
-                                                    27017,
-                                                    "face_library");
-                                            MongoCollection<Document> user_info = face_library.getCollection(
-                                                    "user_info");
-                                            user_info.insertOne(document);
-                                            Looper.prepare();
-                                            Toast.makeText(RegisterPageActivity.this, "成功上传数据到云数据库",
-                                                    Toast.LENGTH_LONG).show();
-                                            Looper.loop();
-                                        }
                                     }
                                 }
                             }else {
