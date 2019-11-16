@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.mapscanner.mapscanner.baidubrain.FaceRecogniseUtil;
+import com.mapscanner.mapscanner.utils.AuthorityUtils;
 import com.mapscanner.mapscanner.utils.ImgUtil;
 import com.mapscanner.mapscanner.utils.MongoDBUtill;
 import com.mongodb.client.MongoCollection;
@@ -97,17 +98,7 @@ public class RegisterPageActivity extends AppCompatActivity {
 
         // 注册图片选择按钮监听器
         imgSelect.setOnClickListener(i -> {
-            if (Build.VERSION.SDK_INT >= 23) {
-                int write = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                int read = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
-                if (write != PackageManager.PERMISSION_GRANTED || read != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
-                            300);
-                }
-            } else {
-                Log.i("wytings", "------------- Build.VERSION.SDK_INT < 23 ------------");
-            }
+            AuthorityUtils.getAlbumAuthority(RegisterPageActivity.this);
             Intent intent = new Intent();
             intent.setAction("android.intent.action.GET_CONTENT");
             intent.setType("image/*");
@@ -170,10 +161,8 @@ public class RegisterPageActivity extends AppCompatActivity {
                                         Document document = new Document(map);
                                         document.append("photo", base64);
                                         MongoDatabase face_library = MongoDBUtill.getConnection("39.105.102.158",
-                                                27017,
-                                                "face_library");
-                                        MongoCollection<Document> user_info = face_library.getCollection(
-                                                "user_info");
+                                                27017, "face_library");
+                                        MongoCollection<Document> user_info = face_library.getCollection("user_info");
                                         user_info.insertOne(document);
                                         Looper.prepare();
                                         Toast.makeText(RegisterPageActivity.this, "注册成功且上传数据到云数据库",

@@ -39,23 +39,23 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:glide:4.9.0'
     //请求网络相关
     //okhttp
-//    implementation 'com.squareup.okhttp3:okhttp:3.14.0'
+    //    implementation 'com.squareup.okhttp3:okhttp:3.14.0'
     //retrofit
-//    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    //    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     //gson
     implementation 'com.google.code.gson:gson:2.8.5'
     //rxjava
-//    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    //    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     //end 请求网络相关
     //可以手势缩放图片
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
-    implementation files('src/libs/mongo-java-driver-3.4.3.jar')
     implementation files('src/libs/org.json-20161124.jar')
     implementation files('src/libs/thumbnailator-0.4.7.jar')
     implementation files('src/libs/aip-java-sdk-4.11.1.jar')
     implementation files('src/libs/slf4j-api-1.7.25.jar')
     implementation 'com.github.lovetuzitong:MultiImageSelector:1.2'
+    implementation files('src/libs/mongo-java-driver-3.2.2.jar')
 }

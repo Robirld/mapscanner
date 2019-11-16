@@ -36,6 +36,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mapscanner.mapscanner.baidubrain.FaceRecogniseUtil;
+import com.mapscanner.mapscanner.utils.AuthorityUtils;
 import com.mapscanner.mapscanner.utils.ImgUtil;
 import com.mapscanner.mapscanner.utils.ToastUtils;
 
@@ -98,21 +99,10 @@ public class Image_album_showActivity extends AppCompatActivity {
         switch (Show_Choice) {
             //如果传递为TAKE_PHOTO
             case TAKE_PHOTO: {
-                if (Build.VERSION.SDK_INT >= 23) {
-                    int write = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                    int read = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
-                    if (write != PackageManager.PERMISSION_GRANTED || read != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
-                                300);
-                    }
-                } else {
-                    Log.i("wytings", "------------- Build.VERSION.SDK_INT < 23 ------------");
-                }
+                AuthorityUtils.getAlbumAuthority(Image_album_showActivity.this);
                 Date date = new Date(System.currentTimeMillis());
                 SimpleDateFormat dateFormat = new SimpleDateFormat("'img'_yyMMdd_HHmmss");
-                File path = Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES).getAbsoluteFile();
+                File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsoluteFile();
                 System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~" + path);
                 imgFile = new File(path, dateFormat.format(date) + ".jpg");
                 try {
@@ -143,98 +133,7 @@ public class Image_album_showActivity extends AppCompatActivity {
             break;
             //如果传递为CHOOSE_PHOTO
             case CHOOSE_PHOTO: {
-//                upload.setVisibility(View.INVISIBLE);
-//                cancel.setVisibility(View.INVISIBLE);
-//                all.setVisibility(View.INVISIBLE);
-//                if (Build.VERSION.SDK_INT >= 23) {
-//                    int write = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-//                    int read = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
-//                    if (write != PackageManager.PERMISSION_GRANTED || read != PackageManager.PERMISSION_GRANTED) {
-//                        requestPermissions(
-//                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
-//                                300);
-//                    } else {
-//                        String name = "CrashDirectory";
-//                        File file1 = new File(Environment.getExternalStorageDirectory(), name);
-//                        if (file1.mkdirs()) {
-//                            Log.i("wytings", "permission -------------> " + file1.getAbsolutePath());
-//                        } else {
-//                            Log.i("wytings", "permission -------------fail to make file ");
-//                        }
-//                    }
-//                } else {
-//                    Log.i("wytings", "------------- Build.VERSION.SDK_INT < 23 ------------");
-//                }
-//                System.out.println("哈哈哈哈哈哈哈" + 666);
-//                linear.removeView(picture1);
-//
-//                List<File> photoList = new ArrayList<>(Arrays.asList(Environment.getExternalStoragePublicDirectory(
-//                        Environment.DIRECTORY_PICTURES).listFiles()));
-//                for (Iterator it = photoList.iterator(); it.hasNext(); ) {
-//                    String fileName = ((File) it.next()).getName();
-//
-//                    if (!(fileName.endsWith(".jpg") || fileName.endsWith(".JPG") || fileName.endsWith(
-//                            ".png") || fileName.endsWith(".PNG") || fileName.endsWith(".jpeg") || fileName.endsWith(
-//                            ".JPEG"))) {
-//                        it.remove();
-//                    }
-//                }
-//                System.out.println("哈哈哈哈哈哈哈" + photoList);
-//                RelativeLayout rtv = findViewById(R.id.rtv);
-//                LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-//                rv.setLayoutManager(layoutManager);
-//                flag[0] = new StringBuilder("NO");
-//                flag[1] = new StringBuilder("IS");
-//                PhotoAdapter adapter = new PhotoAdapter(photoList, selectedFile, flag, rtv);
-//                rv.setAdapter(adapter);
-//
-//
-//                choose.setOnClickListener(i -> {
-//                    rtv.findViewById(R.id.Return_Back_to_page1).setVisibility(View.INVISIBLE);
-//                    rtv.findViewById(R.id.upload).setVisibility(View.VISIBLE);
-//                    flag[0].append("toOK");
-//                    System.out.println(flag);
-//                    PhotoAdapter adapter2 = new PhotoAdapter(photoList, selectedFile, flag, rtv);
-//                    rv.setAdapter(adapter2);
-//                });
-//
-//                all.setOnClickListener(i -> {
-////                    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-//                    if(flag[1].toString().equals("IS")){
-//                        flag[1].append("ALL");
-//                    }
-//                    selectedFile = photoList;
-//                    System.out.println(selectedFile);
-//                    PhotoAdapter adapter2 = new PhotoAdapter(photoList, selectedFile, flag, rtv);
-//                    rv.setAdapter(adapter2);
-//                    all.setEnabled(false);
-//                });
-//
-//                cancel.setOnClickListener(i -> {
-//                    cancel.setVisibility(View.INVISIBLE);
-//                    Return_page.setVisibility(View.VISIBLE);
-//                    choose.setVisibility(View.VISIBLE);
-//                    upload.setVisibility(View.INVISIBLE);
-//                    all.setEnabled(true);
-//                    all.setVisibility(View.INVISIBLE);
-//                    selectedFile = new ArrayList<>();
-//                    System.out.println(selectedFile);
-//                    flag[0] = new StringBuilder("NO");
-//                    flag[1] = new StringBuilder("IS");
-//                    PhotoAdapter adapter2 = new PhotoAdapter(photoList, selectedFile, flag, rtv);
-//                });
-//                    rv.setAdapter(adapter2);
-                if (Build.VERSION.SDK_INT >= 23) {
-                    int write = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                    int read = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
-                    if (write != PackageManager.PERMISSION_GRANTED || read != PackageManager.PERMISSION_GRANTED) {
-                        requestPermissions(
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
-                                300);
-                    }
-                } else {
-                    Log.i("wytings", "------------- Build.VERSION.SDK_INT < 23 ------------");
-                }
+                AuthorityUtils.getAlbumAuthority(Image_album_showActivity.this);
                 Intent intent = new Intent("android.intent.action.GET_CONTENT");
                 intent.setType("image/*");
                 startActivityForResult(intent, CHOOSE_PHOTO);

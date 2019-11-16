@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mapscanner.mapscanner.baidubrain.FaceRecogniseUtil;
+import com.mapscanner.mapscanner.utils.AuthorityUtils;
 import com.mapscanner.mapscanner.utils.ImgUtil;
 import com.mapscanner.mapscanner.utils.ToastUtils;
 
@@ -74,17 +75,7 @@ public class FaceMatchActivity extends AppCompatActivity {
         });
 
         tv02.setOnClickListener(i -> {
-            if (Build.VERSION.SDK_INT >= 23) {
-                int write = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                int read = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
-                if (write != PackageManager.PERMISSION_GRANTED || read != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
-                            300);
-                }
-            } else {
-                Log.i("wytings", "------------- Build.VERSION.SDK_INT < 23 ------------");
-            }
+            AuthorityUtils.getAlbumAuthority(FaceMatchActivity.this);
             Intent intent = new Intent("android.intent.action.GET_CONTENT");
             intent.setType("image/*");
             startActivityForResult(intent, 2);

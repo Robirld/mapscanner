@@ -109,7 +109,7 @@ public class ImgUtil {
     // 将bitmap转为base64
     public static String bitmapToBase64(Bitmap bitmap){
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 60, out);
         byte[] bytes = out.toByteArray();
         return Base64.encodeToString(bytes,Base64.DEFAULT);
     }
