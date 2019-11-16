@@ -3,6 +3,7 @@ package com.mapscanner.mapscanner;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -73,7 +75,10 @@ class PhotoAdapter extends RecyclerView.Adapter {
             e.printStackTrace();
         }
         StringBuffer str = new StringBuffer();
-        String base64 = ImgUtil.bitmapToBase64(bitmap);
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 40, out);
+        byte[] bytes = out.toByteArray();
+        String base64 = Base64.encodeToString(bytes, 0);
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
